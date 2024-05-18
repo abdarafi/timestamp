@@ -1,22 +1,34 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
 
 function App() {
+  const [timestamp, setTimestamp] = useState('');
+
+  const getCurrentTimestamp = () => {
+    const now = new Date();
+    const currentTimestamp = now.toISOString();
+    setTimestamp(currentTimestamp);
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(timestamp).then(() => {
+      alert('Timestamp copied to clipboard!');
+    }).catch(err => {
+      alert('Failed to copy timestamp: ', err);
+    });
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Timestamp</h1>
+        <button onClick={getCurrentTimestamp}>Get Current Timestamp</button>
+        {timestamp && (
+          <div>
+            <p>{timestamp}</p>
+            <button onClick={copyToClipboard}>Copy to Clipboard</button>
+          </div>
+        )}
       </header>
     </div>
   );
